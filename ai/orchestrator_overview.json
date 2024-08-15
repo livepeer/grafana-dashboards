@@ -7,6 +7,20 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
+    },
+    {
+      "name": "VAR_JOB_LIVEPEER",
+      "type": "constant",
+      "label": "Job filter: Orchestrator",
+      "value": "",
+      "description": ""
+    },
+    {
+      "name": "VAR_JOB_GPU",
+      "type": "constant",
+      "label": "Job filter: GPU",
+      "value": "",
+      "description": ""
     }
   ],
   "__elements": {},
@@ -230,7 +244,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "increase(livepeer_winning_tickets_recv{job=\"livepeer-ai\"}[7d])",
+          "expr": "increase(livepeer_winning_tickets_recv{job=~\"^.*$job_livepeer.*$\"}[7d])",
           "hide": false,
           "instant": false,
           "legendFormat": "Wins",
@@ -244,7 +258,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(livepeer_ticket_value_recv{job=\"livepeer-ai\"}[7d])) / 1e+09 * $eth",
+          "expr": "sum(increase(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[7d])) / 1e+09 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Expected",
@@ -258,7 +272,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(livepeer_value_redeemed{job=\"livepeer-ai\"}[7d])) / 1e+09 * $eth",
+          "expr": "sum(increase(livepeer_value_redeemed{job=~\"^.*$job_livepeer.*$\"}[7d])) / 1e+09 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Payed",
@@ -331,7 +345,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "increase(livepeer_ai_models_requested{job=\"livepeer-ai\"}[$__range])",
+          "expr": "increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__range])",
           "hide": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
           "range": true,
@@ -480,7 +494,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_recv{job=\"livepeer-ai\"}[1d])*(60*60*24*365)/12)/10^9 * $eth",
+          "expr": "(rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24*365)/12)/10^9 * $eth",
           "legendFormat": "Monthly",
           "range": true,
           "refId": "A"
@@ -491,7 +505,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_recv{job=\"livepeer-ai\"}[1d])*(60*60*24))/10^9 * $eth",
+          "expr": "(rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24))/10^9 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Daily",
@@ -577,7 +591,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=\"livepeer-ai\", pipeline=\"text-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -590,7 +604,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=\"livepeer-ai\", pipeline=\"image-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
           "hide": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
           "range": true,
@@ -602,7 +616,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=\"livepeer-ai\", pipeline=\"text-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -615,7 +629,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=\"livepeer-ai\", pipeline=\"image-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -628,7 +642,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=\"livepeer-ai\", pipeline=\"audio-to-text\"} * 1 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\"} * 1 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
@@ -759,7 +773,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=\"livepeer-ai\"}[2m]))",
+          "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[2m]))",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -780,11 +794,11 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "#ffffff26",
-            "mode": "fixed"
+            "fixedColor": "semi-dark-blue",
+            "mode": "shades"
           },
           "custom": {
-            "fillOpacity": 30,
+            "fillOpacity": 20,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -833,38 +847,7 @@
           },
           "unit": "percent"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "NVIDIA GeForce RTX 4090[0]"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "NVIDIA GeForce RTX 4090[1]"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
@@ -899,7 +882,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "utilization_gpu{job=\"gpu-ai\"}",
+          "expr": "utilization_gpu{job=~\"^.*$job_gpu.*$\"}",
           "instant": false,
           "legendFormat": "{{gpu}}",
           "range": true,
@@ -918,8 +901,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "light-blue",
-            "mode": "fixed"
+            "fixedColor": "semi-dark-blue",
+            "mode": "shades"
           },
           "decimals": 0,
           "links": [],
@@ -975,7 +958,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "memory_used{job=\"gpu-ai\"}/memory_total{job=\"gpu-ai\"}",
+          "expr": "memory_used{job=~\"^.*$job_gpu.*$\"}/memory_total{job=~\"^.*$job_gpu.*$\"}",
           "instant": true,
           "legendFormat": "{{gpu}}",
           "range": false,
@@ -1080,7 +1063,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (pipeline, model_name) (livepeer_ai_request_latency_score{job=\"livepeer-ai\"})",
+          "expr": "sum by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\"})",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -1155,7 +1138,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "temperature_gpu{job=\"gpu-ai\"}",
+          "expr": "temperature_gpu{job=~\"^.*$job_gpu.*$\"}",
           "instant": true,
           "legendFormat": "{{gpu}}",
           "range": false,
@@ -1241,7 +1224,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "livepeer_versions{job=\"livepeer-ai\"}",
+          "expr": "livepeer_versions{job=~\"^.*$job_livepeer.*$\"}",
           "instant": true,
           "legendFormat": "{{livepeerversion}}",
           "range": false,
@@ -1314,7 +1297,8 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
+                "fixedColor": "semi-dark-blue",
+                "mode": "shades"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -1360,38 +1344,7 @@
               },
               "unit": "celsius"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[0]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "semi-dark-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[1]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "light-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 8,
@@ -1424,7 +1377,7 @@
                 "uid": "${DS_VICTORIAMETRICS}"
               },
               "editorMode": "code",
-              "expr": "temperature_gpu{job=\"gpu-ai\"}",
+              "expr": "temperature_gpu{job=~\"^.*$job_gpu.*$\"}",
               "legendFormat": "{{gpu}}",
               "range": true,
               "refId": "A"
@@ -1444,7 +1397,8 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
+                "fixedColor": "semi-dark-blue",
+                "mode": "shades"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -1454,7 +1408,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 30,
+                "fillOpacity": 20,
                 "gradientMode": "hue",
                 "hideFrom": {
                   "legend": false,
@@ -1494,38 +1448,7 @@
               },
               "unit": "percentunit"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[0]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "semi-dark-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[1]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "light-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 8,
@@ -1558,7 +1481,7 @@
                 "uid": "${DS_VICTORIAMETRICS}"
               },
               "editorMode": "code",
-              "expr": "memory_used{job=\"gpu-ai\"}/memory_total{job=\"gpu-ai\"}",
+              "expr": "memory_used{job=~\"^.*$job_gpu.*$\"}/memory_total{job=~\"^.*$job_gpu.*$\"}",
               "legendFormat": "{{gpu}}",
               "range": true,
               "refId": "A"
@@ -1577,7 +1500,8 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "palette-classic"
+                "fixedColor": "semi-dark-blue",
+                "mode": "shades"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -1587,7 +1511,7 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 30,
+                "fillOpacity": 20,
                 "gradientMode": "hue",
                 "hideFrom": {
                   "legend": false,
@@ -1627,38 +1551,7 @@
               },
               "unit": "percent"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[0]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "semi-dark-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "NVIDIA GeForce RTX 4090[1]"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "light-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 7,
@@ -1691,7 +1584,7 @@
                 "uid": "${DS_VICTORIAMETRICS}"
               },
               "editorMode": "code",
-              "expr": "utilization_gpu{job=\"gpu-ai\"}",
+              "expr": "utilization_gpu{job=~\"^.*$job_gpu.*$\"}",
               "legendFormat": "{{gpu}}",
               "range": true,
               "refId": "A"
@@ -1807,7 +1700,7 @@
                 "uid": "${DS_VICTORIAMETRICS}"
               },
               "editorMode": "code",
-              "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_request_errors{job=\"livepeer-ai\"}[1d]))",
+              "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\"}[1d]))",
               "hide": false,
               "legendFormat": "{{pipeline}}/{{model_name}}",
               "range": true,
@@ -1873,6 +1766,48 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "description": "Filters all Orchestrator metrics by this job name. Leave empty to if you don't want to filter by job name.",
+        "hide": 2,
+        "label": "Job filter: Orchestrator",
+        "name": "job_livepeer",
+        "query": "${VAR_JOB_LIVEPEER}",
+        "skipUrlSync": false,
+        "type": "constant",
+        "current": {
+          "value": "${VAR_JOB_LIVEPEER}",
+          "text": "${VAR_JOB_LIVEPEER}",
+          "selected": false
+        },
+        "options": [
+          {
+            "value": "${VAR_JOB_LIVEPEER}",
+            "text": "${VAR_JOB_LIVEPEER}",
+            "selected": false
+          }
+        ]
+      },
+      {
+        "description": "Filters all GPU metrics by this job name. Leave empty to if you don't want to filter by job name.",
+        "hide": 2,
+        "label": "Job filter: GPU",
+        "name": "job_gpu",
+        "query": "${VAR_JOB_GPU}",
+        "skipUrlSync": false,
+        "type": "constant",
+        "current": {
+          "value": "${VAR_JOB_GPU}",
+          "text": "${VAR_JOB_GPU}",
+          "selected": false
+        },
+        "options": [
+          {
+            "value": "${VAR_JOB_GPU}",
+            "text": "${VAR_JOB_GPU}",
+            "selected": false
+          }
+        ]
       }
     ]
   },
@@ -1889,6 +1824,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 80,
+  "version": 97,
   "weekStart": "monday"
 }
