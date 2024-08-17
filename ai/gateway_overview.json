@@ -344,7 +344,6 @@
           "links": [],
           "mappings": [],
           "min": 0,
-          "noValue": "✅",
           "unit": "short"
         },
         "overrides": []
@@ -950,6 +949,7 @@
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "⌛",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1154,6 +1154,7 @@
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "⌛",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1655,6 +1656,7 @@
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "⌛",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2275,6 +2277,7 @@
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "⌛",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2544,6 +2547,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 73,
+  "version": 75,
   "weekStart": "monday"
 }
