@@ -13,14 +13,14 @@
       "type": "constant",
       "label": "Job filter: Orchestrator",
       "value": "",
-      "description": ""
+      "description": "Filter Orchestrator metrics by `job`, as set in your Prometheus client. Keep empty to apply no filtering."
     },
     {
       "name": "VAR_JOB_GPU",
       "type": "constant",
       "label": "Job filter: GPU",
       "value": "",
-      "description": ""
+      "description": "Filter GPU metrics by `job`, as set in your Prometheus client. Keep empty to apply no filtering."
     }
   ],
   "__elements": {},
