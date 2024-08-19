@@ -491,7 +491,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\"} * 1 * 1e-18 * $eth)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\"} * 1000 * 60 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -499,7 +499,7 @@
           "refId": "audio2txt"
         }
       ],
-      "title": "Average income",
+      "title": "Model pricing",
       "transformations": [
         {
           "id": "concatenate",
@@ -1126,7 +1126,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate 25 frames of 1024x1024 \n- img2vid: time to generate 25 frames of 1024x1024\n- audio2txt: time to process a minute of audio",
+      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1252,7 +1252,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\"} * 1024 * 1024 * 25)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\"} * 1024 * 1024)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -1265,7 +1265,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\"} * 1024 * 1024 * 25)",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\"} * 1024 * 1024)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -1857,6 +1857,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 143,
+  "version": 148,
   "weekStart": "monday"
 }
