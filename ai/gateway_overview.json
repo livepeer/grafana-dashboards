@@ -7,13 +7,6 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
-    },
-    {
-      "name": "VAR_JOB_LIVEPEER",
-      "type": "constant",
-      "label": "Job filter: Gateway",
-      "value": "",
-      "description": "Filter Gateway metrics by `job`, as set in your Prometheus client. Keep empty to apply no filtering."
     }
   ],
   "__elements": {},
@@ -997,18 +990,6 @@
                 "value": 150
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 150
-              }
-            ]
           }
         ]
       },
@@ -1124,8 +1105,7 @@
             "reducers": [
               "min",
               "mean",
-              "max",
-              "lastNotNull"
+              "max"
             ]
           }
         }
@@ -1195,18 +1175,6 @@
             "matcher": {
               "id": "byName",
               "options": "Max"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 150
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
             },
             "properties": [
               {
@@ -1327,8 +1295,7 @@
             "reducers": [
               "min",
               "mean",
-              "max",
-              "lastNotNull"
+              "max"
             ]
           }
         }
@@ -2536,25 +2503,25 @@
         "type": "query"
       },
       {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
         "description": "Filters all Gateway metrics by this job name. Leave empty to if you don't want to filter by job name.",
         "hide": 2,
         "label": "Job filter: Gateway",
         "name": "job_livepeer",
-        "query": "${VAR_JOB_LIVEPEER}",
-        "skipUrlSync": false,
-        "type": "constant",
-        "current": {
-          "value": "${VAR_JOB_LIVEPEER}",
-          "text": "${VAR_JOB_LIVEPEER}",
-          "selected": false
-        },
         "options": [
           {
-            "value": "${VAR_JOB_LIVEPEER}",
-            "text": "${VAR_JOB_LIVEPEER}",
-            "selected": false
+            "selected": true,
+            "text": "",
+            "value": ""
           }
-        ]
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       },
       {
         "current": {},
@@ -2596,6 +2563,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 76,
+  "version": 78,
   "weekStart": "monday"
 }

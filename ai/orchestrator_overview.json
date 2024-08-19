@@ -7,20 +7,6 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
-    },
-    {
-      "name": "VAR_JOB_LIVEPEER",
-      "type": "constant",
-      "label": "Job filter: Orchestrator",
-      "value": "",
-      "description": "Filter Orchestrator metrics by `job`, as set in your Prometheus client. Keep empty to apply no filtering."
-    },
-    {
-      "name": "VAR_JOB_GPU",
-      "type": "constant",
-      "label": "Job filter: GPU",
-      "value": "",
-      "description": "Filter GPU metrics by `job`, as set in your Prometheus client. Keep empty to apply no filtering."
     }
   ],
   "__elements": {},
@@ -1539,7 +1525,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 73
+            "y": 38
           },
           "id": 40,
           "options": {
@@ -1644,7 +1630,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 81
+            "y": 46
           },
           "id": 23763572216,
           "options": {
@@ -1748,7 +1734,7 @@
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 89
+            "y": 54
           },
           "id": 23763572275,
           "options": {
@@ -1818,46 +1804,46 @@
         "type": "textbox"
       },
       {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
         "description": "Filters all Orchestrator metrics by this job name. Leave empty to if you don't want to filter by job name.",
         "hide": 2,
         "label": "Job filter: Orchestrator",
         "name": "job_livepeer",
-        "query": "${VAR_JOB_LIVEPEER}",
-        "skipUrlSync": false,
-        "type": "constant",
-        "current": {
-          "value": "${VAR_JOB_LIVEPEER}",
-          "text": "${VAR_JOB_LIVEPEER}",
-          "selected": false
-        },
         "options": [
           {
-            "value": "${VAR_JOB_LIVEPEER}",
-            "text": "${VAR_JOB_LIVEPEER}",
-            "selected": false
+            "selected": true,
+            "text": "",
+            "value": ""
           }
-        ]
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       },
       {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
         "description": "Filters all GPU metrics by this job name. Leave empty to if you don't want to filter by job name.",
         "hide": 2,
         "label": "Job filter: GPU",
         "name": "job_gpu",
-        "query": "${VAR_JOB_GPU}",
-        "skipUrlSync": false,
-        "type": "constant",
-        "current": {
-          "value": "${VAR_JOB_GPU}",
-          "text": "${VAR_JOB_GPU}",
-          "selected": false
-        },
         "options": [
           {
-            "value": "${VAR_JOB_GPU}",
-            "text": "${VAR_JOB_GPU}",
-            "selected": false
+            "selected": true,
+            "text": "",
+            "value": ""
           }
-        ]
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
@@ -1874,6 +1860,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 130,
+  "version": 133,
   "weekStart": "monday"
 }
