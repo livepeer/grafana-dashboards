@@ -622,6 +622,7 @@
         "y": 18
       },
       "id": 23763572295,
+      "maxDataPoints": 100,
       "options": {
         "legend": {
           "calcs": [],
@@ -2544,7 +2545,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -2556,6 +2557,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 82,
+  "version": 84,
   "weekStart": "monday"
 }

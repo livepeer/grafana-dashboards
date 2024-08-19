@@ -902,6 +902,7 @@
         "y": 16
       },
       "id": 23763572295,
+      "maxDataPoints": 100,
       "options": {
         "legend": {
           "calcs": [],
@@ -1846,7 +1847,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -1858,6 +1859,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 139,
+  "version": 140,
   "weekStart": "monday"
 }
