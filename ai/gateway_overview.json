@@ -648,7 +648,7 @@
           "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__interval]))",
           "hide": false,
           "instant": false,
-          "interval": "2m",
+          "interval": "",
           "legendFormat": "{{pipeline}}/{{model_name}}",
           "range": true,
           "refId": "A"
@@ -2557,6 +2557,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 84,
+  "version": 85,
   "weekStart": "monday"
 }
