@@ -853,7 +853,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
-            "drawStyle": "line",
+            "drawStyle": "bars",
             "fillOpacity": 70,
             "gradientMode": "none",
             "hideFrom": {
@@ -863,7 +863,7 @@
             },
             "insertNulls": false,
             "lineInterpolation": "stepAfter",
-            "lineWidth": 0,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -878,6 +878,7 @@
               "mode": "off"
             }
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -901,7 +902,6 @@
         "y": 16
       },
       "id": 23763572295,
-      "interval": "15s",
       "options": {
         "legend": {
           "calcs": [],
@@ -924,7 +924,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[2m]))",
+          "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__rate_interval]))",
           "hide": false,
           "instant": false,
           "legendFormat": "{{pipeline}}/{{model_name}}",
@@ -1860,6 +1860,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 133,
+  "version": 135,
   "weekStart": "monday"
 }
