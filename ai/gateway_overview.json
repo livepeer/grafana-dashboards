@@ -571,7 +571,7 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "right",
+            "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
             "fillOpacity": 70,
@@ -697,6 +697,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -767,6 +768,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1357,6 +1359,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1372,7 +1375,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 1,
+        "x": 0,
         "y": 42
       },
       "id": 23763572303,
@@ -1426,6 +1429,7 @@
             "mode": "fixed"
           },
           "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1441,7 +1445,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 6,
+        "x": 3,
         "y": 42
       },
       "id": 23763572319,
@@ -1487,6 +1491,144 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
+      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-blue",
+            "mode": "fixed"
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "noValue": "⌛",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent"
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 6,
+        "y": 42
+      },
+      "id": 23763572306,
+      "interval": "15s",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "txt2img"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth",
+          "hide": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "img2img"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "txt2vid"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "img2vid"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", model_name=\"$model\"} * 1000 * 60 * 1e-18 * $eth",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "audio2txt"
+        }
+      ],
+      "title": "Average price",
+      "transformations": [
+        {
+          "id": "concatenate",
+          "options": {}
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "mean"
+            ]
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_VICTORIAMETRICS}"
+      },
       "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
       "fieldConfig": {
         "defaults": {
@@ -1499,7 +1641,7 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "right",
+            "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1539,25 +1681,12 @@
           },
           "unit": "s"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "B"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 15,
-        "w": 14,
-        "x": 10,
+        "w": 15,
+        "x": 9,
         "y": 42
       },
       "id": 23763572316,
@@ -1655,182 +1784,6 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "noValue": "⌛",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent"
-              }
-            ]
-          },
-          "unit": "string"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "custom.width",
-                "value": 100
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 5,
-        "x": 0,
-        "y": 47
-      },
-      "id": 23763572306,
-      "interval": "15s",
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "Last *"
-          }
-        ]
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (orchestrator_address) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{orchestrator_address}}",
-          "range": true,
-          "refId": "txt2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (orchestrator_address) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth)",
-          "hide": false,
-          "legendFormat": "{{orchestrator_address}}",
-          "range": true,
-          "refId": "img2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (orchestrator_address) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{orchestrator_address}}",
-          "range": true,
-          "refId": "txt2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (orchestrator_address) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{orchestrator_address}}",
-          "range": true,
-          "refId": "img2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (orchestrator_address) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", model_name=\"$model\"} * 1000 * 60 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{orchestrator_address}}",
-          "range": true,
-          "refId": "audio2txt"
-        }
-      ],
-      "title": "Average price",
-      "transformations": [
-        {
-          "id": "concatenate",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "includeByName": {},
-            "indexByName": {},
-            "renameByName": {
-              "0x58F90EBc1f19BDe9475556C647B0eaEE34ECe77d": "",
-              "Value 1": "Failed jobs"
-            }
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1875,8 +1828,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 5,
-        "x": 5,
+        "w": 9,
+        "x": 0,
         "y": 47
       },
       "id": 23763572298,
@@ -1929,506 +1882,6 @@
             "includeByName": {},
             "indexByName": {},
             "renameByName": {}
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 57
-      },
-      "id": 23763572304,
-      "panels": [],
-      "title": "Subsection: Worker specific stats",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "",
-      "gridPos": {
-        "h": 3,
-        "w": 24,
-        "x": 0,
-        "y": 58
-      },
-      "id": 23763572305,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "_____\n# Selected node: ${worker} \n_____",
-        "mode": "markdown"
-      },
-      "pluginVersion": "11.1.0",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "noValue": "✅",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent"
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 100
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 0,
-        "y": 61
-      },
-      "id": 23763572323,
-      "interval": "15s",
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Last *"
-          }
-        ]
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "sum by (pipeline, model_name, error_code) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", orchestrator_address=\"$worker\"}[$__range]))",
-          "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}: `{{error_code}}`",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Errors",
-      "transformations": [
-        {
-          "id": "concatenate",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "includeByName": {},
-            "indexByName": {},
-            "renameByName": {}
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        }
-      ],
-      "transparent": true,
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame4\n- audio2txt: time to process 1 second of audio",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "#ffffff26",
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "right",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent"
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "B"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 15,
-        "w": 14,
-        "x": 10,
-        "y": 61
-      },
-      "id": 23763572325,
-      "interval": "15s",
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "mean",
-            "max",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", orchestrator_address=\"$worker\" } * 1024 * 1024)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "txt2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", orchestrator_address=\"$worker\"} * 1024 * 1024)",
-          "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "img2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", orchestrator_address=\"$worker\"} * 1024 * 1024)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "txt2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", orchestrator_address=\"$worker\"} * 1024 * 1024)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "img2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", orchestrator_address=\"$worker\"} * 1)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "audio2txt"
-        }
-      ],
-      "title": "Latency score",
-      "transparent": true,
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "noValue": "⌛",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent"
-              }
-            ]
-          },
-          "unit": "string"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "custom.width",
-                "value": 100
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 10,
-        "x": 0,
-        "y": 69
-      },
-      "id": 23763572324,
-      "interval": "15s",
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "Last *"
-          }
-        ]
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", orchestrator_address=\"$worker\"} * 1024 * 1024 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "txt2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", orchestrator_address=\"$worker\"} * 1024 * 1024 * 1e-18 * $eth)",
-          "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "img2img"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", orchestrator_address=\"$worker\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "txt2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", orchestrator_address=\"$worker\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}} {{orchestrator_address}}",
-          "range": true,
-          "refId": "img2vid"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", orchestrator_address=\"$worker\"} * 1000 * 60  * 1e-18 * $eth)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
-          "range": true,
-          "refId": "audio2txt"
-        }
-      ],
-      "title": "Average cost",
-      "transformations": [
-        {
-          "id": "concatenate",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "includeByName": {},
-            "indexByName": {},
-            "renameByName": {
-              "0x58F90EBc1f19BDe9475556C647B0eaEE34ECe77d": "",
-              "Value 1": "Failed jobs"
-            }
           }
         },
         {
@@ -2516,31 +1969,6 @@
         "query": "",
         "skipUrlSync": false,
         "type": "textbox"
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_VICTORIAMETRICS}"
-        },
-        "definition": "label_values(orchestrator_address)",
-        "description": "View stats for a specific worker node in the subsection down below.",
-        "hide": 0,
-        "includeAll": false,
-        "label": "Worker",
-        "multi": false,
-        "name": "worker",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(orchestrator_address)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 5,
-        "type": "query"
       }
     ]
   },
@@ -2557,6 +1985,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 92,
+  "version": 97,
   "weekStart": "monday"
 }

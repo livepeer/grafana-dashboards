@@ -850,7 +850,7 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "right",
+            "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "bars",
             "fillOpacity": 70,
@@ -1138,7 +1138,7 @@
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
-            "axisPlacement": "right",
+            "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1857,6 +1857,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 148,
+  "version": 150,
   "weekStart": "monday"
 }
