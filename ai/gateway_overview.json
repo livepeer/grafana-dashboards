@@ -677,7 +677,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "_____\n# Worker stats\n_____",
+        "content": "_____\n# Job stats\n_____",
         "mode": "markdown"
       },
       "pluginVersion": "11.1.0",
@@ -912,7 +912,7 @@
           "refId": "audio2txt"
         }
       ],
-      "title": "Failed jobs",
+      "title": "Error origin",
       "transformations": [
         {
           "id": "labelsToFields",
@@ -1364,7 +1364,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1434,7 +1435,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1506,7 +1508,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1675,7 +1678,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1805,7 +1809,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1985,6 +1990,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 97,
+  "version": 98,
   "weekStart": "monday"
 }
