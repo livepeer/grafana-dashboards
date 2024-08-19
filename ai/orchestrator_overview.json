@@ -242,7 +242,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(livepeer_winning_tickets_recv{job=~\"^.*$job_livepeer.*$\"}[7d]))",
+          "expr": "sum(increase(livepeer_winning_tickets_recv{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
           "hide": false,
           "instant": false,
           "legendFormat": "Wins",
@@ -256,7 +256,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[7d])) / 1e+09 * $eth",
+          "expr": "sum(increase(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[$__range])) / 1e+09 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Expected",
@@ -270,7 +270,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(livepeer_value_redeemed{job=~\"^.*$job_livepeer.*$\"}[7d])) / 1e+09 * $eth",
+          "expr": "sum(increase(livepeer_value_redeemed{job=~\"^.*$job_livepeer.*$\"}[$__range])) / 1e+09 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Payed",
@@ -278,7 +278,6 @@
           "refId": "B"
         }
       ],
-      "timeFrom": "7d",
       "transparent": true,
       "type": "stat"
     },
@@ -1859,6 +1858,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 140,
+  "version": 141,
   "weekStart": "monday"
 }
