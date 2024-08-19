@@ -627,7 +627,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
@@ -1361,8 +1361,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -1431,8 +1430,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -1535,8 +1533,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               }
             ]
           },
@@ -1679,8 +1676,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               }
             ]
           },
@@ -1856,8 +1852,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
-                "value": null
+                "color": "transparent"
               }
             ]
           },
@@ -2562,6 +2557,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 87,
+  "version": 88,
   "weekStart": "monday"
 }
