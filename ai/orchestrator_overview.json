@@ -348,7 +348,7 @@
           "editorMode": "code",
           "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
           "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "A"
         }
@@ -443,7 +443,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "txt2img"
         },
@@ -455,7 +455,7 @@
           "editorMode": "code",
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\"} * 1024 * 1024 * 1e-18 * $eth)",
           "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "img2img"
         },
@@ -468,7 +468,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "txt2vid"
         },
@@ -481,7 +481,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\"} * 1024 * 1024 * 25 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "img2vid"
         },
@@ -494,7 +494,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\"} * 1000 * 60 * 1e-18 * $eth)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
         }
@@ -773,7 +773,7 @@
           "editorMode": "code",
           "expr": "sum by (pipeline, model_name, error_code) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
           "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}: `{{error_code}}`",
+          "legendFormat": "{{pipeline}} | {{model_name}}: `{{error_code}}`",
           "range": true,
           "refId": "A"
         }
@@ -928,7 +928,7 @@
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "A"
         }
@@ -1230,7 +1230,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\"} * 1024 * 1024)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "txt2img"
         },
@@ -1242,7 +1242,7 @@
           "editorMode": "code",
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\"} * 1024 * 1024)",
           "hide": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "img2img"
         },
@@ -1255,7 +1255,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\"} * 1024 * 1024)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "txt2vid"
         },
@@ -1268,7 +1268,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\"} * 1024 * 1024)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "img2vid"
         },
@@ -1281,7 +1281,7 @@
           "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\"} * 1)",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{pipeline}}/{{model_name}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
         }
@@ -1857,6 +1857,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 150,
+  "version": 151,
   "weekStart": "monday"
 }
