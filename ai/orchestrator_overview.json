@@ -300,6 +300,7 @@
               "viz": false
             }
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -720,6 +721,7 @@
             },
             "inspect": false
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -1884,6 +1886,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 156,
+  "version": 157,
   "weekStart": "monday"
 }

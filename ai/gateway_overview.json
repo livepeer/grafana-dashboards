@@ -278,7 +278,7 @@
               "viz": false
             }
           },
-          "decimals": 1,
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -358,9 +358,9 @@
               "viz": false
             }
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
-          "max": 1,
           "min": 0,
           "noValue": "0",
           "unit": "short"
@@ -618,6 +618,7 @@
             "fixedColor": "dark-green",
             "mode": "fixed"
           },
+          "decimals": 0,
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -689,6 +690,7 @@
             "fixedColor": "dark-orange",
             "mode": "fixed"
           },
+          "decimals": 0,
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -871,6 +873,7 @@
               "viz": false
             }
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -1358,6 +1361,7 @@
               "viz": false
             }
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -1490,6 +1494,7 @@
             "fixedColor": "dark-green",
             "mode": "fixed"
           },
+          "decimals": 0,
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -1561,6 +1566,7 @@
             "fixedColor": "dark-orange",
             "mode": "fixed"
           },
+          "decimals": 0,
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -1959,6 +1965,7 @@
             },
             "inspect": false
           },
+          "decimals": 0,
           "links": [],
           "mappings": [],
           "min": 0,
@@ -2148,6 +2155,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 117,
+  "version": 118,
   "weekStart": "monday"
 }
