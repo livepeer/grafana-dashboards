@@ -7,10 +7,22 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_EXPRESSION",
+      "label": "Expression",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "__expr__"
     }
   ],
   "__elements": {},
   "__requires": [
+    {
+      "type": "datasource",
+      "id": "__expr__",
+      "version": "1.0.0"
+    },
     {
       "type": "grafana",
       "id": "grafana",
@@ -159,7 +171,7 @@
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 2,
+          "decimals": 4,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -170,22 +182,22 @@
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "Eth"
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "Wins"
+              "options": "B"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "short"
+                "value": "currencyUSD"
               },
               {
                 "id": "decimals",
-                "value": 0
+                "value": 2
               }
             ]
           }
@@ -213,7 +225,7 @@
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "value",
         "wideLayout": true
       },
       "pluginVersion": "11.1.0",
@@ -225,12 +237,22 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[$__range])) / 1e+09 * $eth",
+          "expr": "sum(increase(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[$__range])) / 1e+09",
           "hide": false,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "eth",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "__expr__",
+            "uid": "${DS_EXPRESSION}"
+          },
+          "expression": "$A * $eth",
+          "hide": false,
+          "refId": "B",
+          "type": "math"
         }
       ],
       "title": "Ticket value sent",
@@ -256,15 +278,17 @@
               "viz": false
             }
           },
+          "decimals": 1,
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 15,
         "w": 9,
         "x": 6,
         "y": 4
@@ -320,7 +344,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "",
+      "description": "Requests that failed due to no supply being available",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -336,18 +360,20 @@
           },
           "links": [],
           "mappings": [],
+          "max": 1,
           "min": 0,
+          "noValue": "0",
           "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 15,
         "w": 9,
         "x": 15,
         "y": 4
       },
-      "id": 23763572284,
+      "id": 23763572324,
       "interval": "15s",
       "options": {
         "displayLabels": [],
@@ -382,14 +408,14 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (pipeline, model_name) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
+          "expr": "sum by (pipeline, model_name) (\n    increase(\n        livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", error_code=~\"no orchestrators available.*\"}[$__range]\n    )\n)",
           "hide": false,
           "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Errors",
+      "title": "Missing supply",
       "transparent": true,
       "type": "piechart"
     },
@@ -504,7 +530,7 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 6,
         "x": 0,
         "y": 9
@@ -531,7 +557,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24*365)/12)*1e-9 * $eth or on() vector(0)",
+          "expr": "sum((rate(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24*365)/12)*1e-9 * $eth) or on() vector(0)",
           "legendFormat": "Monthly",
           "range": true,
           "refId": "A"
@@ -542,7 +568,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24))*1e-9 * $eth or on() vector(0)",
+          "expr": "sum((rate(livepeer_ticket_value_sent{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24))*1e-9 * $eth) or on() vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Daily",
@@ -553,6 +579,174 @@
       "title": "💵 Daily/Monthly Fees",
       "transparent": true,
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_VICTORIAMETRICS}"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 16
+      },
+      "id": 23763572300,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "_____\n# Job stats\n_____",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.1.0",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_VICTORIAMETRICS}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 19
+      },
+      "id": 23763572320,
+      "interval": "15s",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
+          "hide": false,
+          "legendFormat": "Sum",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Completed",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_VICTORIAMETRICS}"
+      },
+      "description": "Requests that failed due to no supply being available",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 19
+      },
+      "id": 23763572323,
+      "interval": "15s",
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(\n    increase(\n        livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", error_code=~\"no orchestrators available.*\"}[$__range]\n    )\n)",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Missing supply",
+      "transparent": true,
+      "type": "stat"
     },
     {
       "datasource": {
@@ -616,10 +810,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 15,
         "w": 18,
         "x": 6,
-        "y": 18
+        "y": 19
       },
       "id": 23763572295,
       "maxDataPoints": 100,
@@ -664,174 +858,6 @@
         "uid": "${DS_VICTORIAMETRICS}"
       },
       "description": "",
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 19
-      },
-      "id": 23763572300,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "_____\n# Job stats\n_____",
-        "mode": "markdown"
-      },
-      "pluginVersion": "11.1.0",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "dark-green",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 22
-      },
-      "id": 23763572320,
-      "interval": "15s",
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(livepeer_ai_models_requested{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
-          "hide": false,
-          "legendFormat": "Sum",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Completed",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "dark-red",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 3,
-        "y": 22
-      },
-      "id": 23763572321,
-      "interval": "15s",
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_VICTORIAMETRICS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
-          "hide": false,
-          "legendFormat": "Sum",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Failed",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_VICTORIAMETRICS}"
-      },
-      "description": "Where did the error which caused the job to fail occur?",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -848,33 +874,23 @@
           "links": [],
           "mappings": [],
           "min": 0,
+          "noValue": "0",
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Gateway"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
         "w": 6,
         "x": 0,
-        "y": 27
+        "y": 24
       },
-      "id": 23763572322,
+      "id": 23763572284,
       "interval": "15s",
       "options": {
+        "displayLabels": [],
         "legend": {
+          "calcs": [],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true,
@@ -892,8 +908,8 @@
           "values": false
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "multi",
+          "sort": "desc"
         }
       },
       "pluginVersion": "11.1.0",
@@ -904,24 +920,14 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (orchestrator_address) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\"}[$__range]))",
+          "expr": "sum by (pipeline, model_name) (\n    increase(\n        livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", error_code!=\"no orchestrators available within 2s timeout\", error_code!=\"no orchestrators available\"}[$__range]\n    )\n)",
           "hide": false,
-          "instant": false,
-          "legendFormat": "{{orchestrator_address}}",
+          "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
-          "refId": "audio2txt"
+          "refId": "A"
         }
       ],
-      "title": "Error origin",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "mode": "columns",
-            "valueLabel": "orchestrator_address"
-          }
-        }
-      ],
+      "title": "Errors by model",
       "transparent": true,
       "type": "piechart"
     },
@@ -930,7 +936,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
+      "description": "What was charged for the average job:\n- upscale: from 512x512 to 1024x1024\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -998,10 +1004,10 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 9,
         "x": 6,
-        "y": 29
+        "y": 34
       },
       "id": 23763572288,
       "interval": "15s",
@@ -1084,6 +1090,19 @@
           "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\"} * 1024 * 1024 * 1e-18 * $eth)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{pipeline}} | {{model_name}}",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Average cost",
@@ -1122,7 +1141,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process a second of audio",
+      "description": "Processing times, the lower the better:\n- upscale: time to upscale from 512x512 to 1024x1024\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process a second of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1190,10 +1209,10 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 9,
         "x": 15,
-        "y": 29
+        "y": 34
       },
       "id": 23763572315,
       "interval": "15s",
@@ -1274,6 +1293,19 @@
           "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\"} * 1024 * 1024)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{pipeline}} | {{model_name}}",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Latency score",
@@ -1308,12 +1340,112 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_VICTORIAMETRICS}"
+      },
+      "description": "Where did the error which caused the job to fail occur?",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#ffffff26",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "noValue": "0",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Gateway"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 0,
+        "y": 35
+      },
+      "id": 23763572322,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (orchestrator_address) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", error_code!~\"no orchestrators available.*\"}[$__range]))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{orchestrator_address}}",
+          "range": true,
+          "refId": "audio2txt"
+        }
+      ],
+      "title": "Error origin",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns",
+            "valueLabel": "orchestrator_address"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 45
       },
       "id": 23763572289,
       "panels": [],
@@ -1330,7 +1462,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 46
       },
       "id": 23763572302,
       "options": {
@@ -1364,7 +1496,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1376,7 +1509,7 @@
         "h": 5,
         "w": 3,
         "x": 0,
-        "y": 42
+        "y": 49
       },
       "id": 23763572303,
       "interval": "15s",
@@ -1421,11 +1554,11 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "",
+      "description": "Requests that failed due to no supply being available",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "dark-red",
+            "fixedColor": "dark-orange",
             "mode": "fixed"
           },
           "mappings": [],
@@ -1434,7 +1567,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1446,9 +1580,9 @@
         "h": 5,
         "w": 3,
         "x": 3,
-        "y": 42
+        "y": 49
       },
-      "id": 23763572319,
+      "id": 23763572325,
       "interval": "15s",
       "options": {
         "colorMode": "background",
@@ -1475,14 +1609,14 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum(increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", model_name=\"$model\"}[$__range]))",
+          "expr": "sum(\n    increase(\n        livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", model_name=\"$model\", error_code=~\"no orchestrators available.*\"}[$__range]\n    )\n)",
           "hide": false,
-          "legendFormat": "Sum",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Failed",
+      "title": "Missing supply",
       "transparent": true,
       "type": "stat"
     },
@@ -1491,7 +1625,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
+      "description": "What was charged for the average job:\n- upscale: from 512x512 to 1024x1024\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1506,7 +1640,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1518,7 +1653,7 @@
         "h": 5,
         "w": 3,
         "x": 6,
-        "y": 42
+        "y": 49
       },
       "id": 23763572306,
       "interval": "15s",
@@ -1547,7 +1682,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-image\", model_name=\"$model\"}[$__range]) * 1024 * 1024 * 1e-18 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost",
@@ -1560,7 +1695,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", model_name=\"$model\"} * 1024 * 1024 * 1e-18 * $eth",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-image\", model_name=\"$model\"}[$__range]) * 1024 * 1024 * 1e-18 * $eth",
           "hide": false,
           "legendFormat": "Cost",
           "range": true,
@@ -1572,7 +1707,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"text-to-video\", model_name=\"$model\"}[$__range]) * 1024 * 1024 * 25 * 1e-18 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost",
@@ -1585,7 +1720,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", model_name=\"$model\"} * 1024 * 1024 * 25 * 1e-18 * $eth",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"image-to-video\", model_name=\"$model\"}[$__range]) * 1024 * 1024 * 25 * 1e-18 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost",
@@ -1598,12 +1733,25 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", model_name=\"$model\"} * 1000 * 60 * 1e-18 * $eth",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"audio-to-text\", model_name=\"$model\"}[$__range]) * 1000 * 60 * 1e-18 * $eth",
           "hide": false,
           "instant": false,
           "legendFormat": "Cost",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg_over_time(livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\", model_name=\"$model\"}[$__range]) * 1024 * 1024 * 1e-18 * $eth",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Cost",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Average price",
@@ -1629,7 +1777,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
+      "description": "Processing times, the lower the better:\n- upscale: time to upscale from 512x512 to 1024x1024\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1675,7 +1823,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1684,10 +1833,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 16,
         "w": 15,
         "x": 9,
-        "y": 42
+        "y": 49
       },
       "id": 23763572316,
       "interval": "15s",
@@ -1773,6 +1922,19 @@
           "legendFormat": "{{orchestrator_address}}",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg by (orchestrator_address) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\", model_name=\"$model\"} * 1024 * 1024)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{orchestrator_address}}",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Latency score",
@@ -1805,7 +1967,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent"
+                "color": "transparent",
+                "value": null
               }
             ]
           },
@@ -1827,10 +1990,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 9,
         "x": 0,
-        "y": 47
+        "y": 54
       },
       "id": 23763572298,
       "interval": "15s",
@@ -1860,9 +2023,9 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "sum by (orchestrator_address, error_code) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", model_name=\"$model\"}[$__range]))",
+          "expr": "sum by (orchestrator_address, error_code) (increase(livepeer_ai_request_errors{job=~\"^.*$job_livepeer.*$\", model_name=\"$model\", error_code!~\"no orchestrators available.*\"}[$__range]))",
           "hide": false,
-          "legendFormat": "{{orchestrator_address}} `{{error_code}}`",
+          "legendFormat": "{{orchestrator_address}}: {{error_code}}",
           "range": true,
           "refId": "A"
         }
@@ -1985,6 +2148,6 @@
   "timezone": "",
   "title": "Gateway AI overview",
   "uid": "Livepeer-Gateway-AI",
-  "version": 99,
+  "version": 117,
   "weekStart": "monday"
 }

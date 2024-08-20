@@ -362,7 +362,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
+      "description": "What you charge for the average job:\n- upscale: from 512x512 to 1024x1024\n- txt2img: per 1024x1024 frame\n- img2img: per 1024x1024 frame\n- txt2vid: per 25 frames of 1024x1024 \n- img2vid: per 25 frames of 1024x1024\n- audio2txt: per minute of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -497,6 +497,19 @@
           "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_price{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\"} * 1024 * 1024 * 1e-18 * $eth)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{pipeline}} | {{model_name}}",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Model pricing",
@@ -666,7 +679,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"} [1d])*(60*60*24*365)/12)*1e-9 * $eth or on() vector(0)",
+          "expr": "sum((rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"} [1d])*(60*60*24*365)/12)*1e-9 * $eth) or on() vector(0)",
           "legendFormat": "Monthly",
           "range": true,
           "refId": "A"
@@ -677,7 +690,7 @@
             "uid": "${DS_VICTORIAMETRICS}"
           },
           "editorMode": "code",
-          "expr": "(rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24))*1e-9 * $eth or on() vector(0)",
+          "expr": "sum((rate(livepeer_ticket_value_recv{job=~\"^.*$job_livepeer.*$\"}[1d])*(60*60*24))*1e-9 * $eth) or on() vector(0)",
           "hide": false,
           "instant": false,
           "legendFormat": "Daily",
@@ -1126,7 +1139,7 @@
         "type": "prometheus",
         "uid": "${DS_VICTORIAMETRICS}"
       },
-      "description": "An estimation per pipeline:\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
+      "description": "Processing times, the lower the better:\n- upscale: time to upscale from 512x512 to 1024x1024\n- txt2img: time to generate a 1024x1024 frame\n- img2img: time to generate a 1024x1024 frame\n- txt2vid: time to generate a 1024x1024 frame\n- img2vid: time to generate a 1024x1024 frame\n- audio2txt: time to process 1 second of audio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1215,8 +1228,8 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "mode": "multi",
+          "sort": "desc"
         }
       },
       "pluginVersion": "11.1.0",
@@ -1284,6 +1297,19 @@
           "legendFormat": "{{pipeline}} | {{model_name}}",
           "range": true,
           "refId": "audio2txt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_VICTORIAMETRICS}"
+          },
+          "editorMode": "code",
+          "expr": "avg by (pipeline, model_name) (livepeer_ai_request_latency_score{job=~\"^.*$job_livepeer.*$\", pipeline=\"upscale\"} * 1024 * 1024)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{pipeline}} | {{model_name}}",
+          "range": true,
+          "refId": "upscale"
         }
       ],
       "title": "Latency score",
@@ -1394,7 +1420,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#262a2a73"
+                "color": "#262a2a73",
+                "value": null
               }
             ]
           },
@@ -1857,6 +1884,6 @@
   "timezone": "",
   "title": "Orchestrator AI overview",
   "uid": "Livepeer-AI",
-  "version": 151,
+  "version": 156,
   "weekStart": "monday"
 }
